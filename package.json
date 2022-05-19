@@ -1,0 +1,9 @@
+{
+  "name": "anonymise-hl.7-files",
+  "version": "1.0.0",
+  "dependencies": {
+    "express": "^4.18.1",
+    "hl7-standard": "^1.0.4",
+    "read-file": "^0.2.0"
+  }
+}
