@@ -1,14 +1,14 @@
-//jshint esversion:8
-//jshint node:true
 const fs = require( 'fs' );
 const path = require( 'path' );
 const HL7 = require('hl7-standard');
 const util = require("util");
-
+let fileContent
+//let hl7 = new HL7
 
 const fileDir = "C:\\Users\\dboiko\\IdeaProjects\\anonymise-hl.7-files\\unmodifiedFiles";
 let familyName
 const readFile = util.promisify(fs.readFile);
+let a =  0;
 
 // Make an async function that gets executed immediately
 (async ()=>{
@@ -26,13 +26,33 @@ const readFile = util.promisify(fs.readFile);
                 if (err) throw err;
                 // code here
             });
-            const familyName = hl7.getSegments('PID.1');
-            console.log(familyName)
+            a++
+            const originalSerialNumber = hl7.get('PID.3.1');
+            console.log(originalSerialNumber)
+            changePatientData (hl7, a, randomSerialNumber())
+            const newSerialNumber = hl7.get('PID.3.1');
+            console.log("neue Seriennummer " + newSerialNumber)
 
-    }}
+            console.log()
+            const familyName = hl7.get('PID');
+            console.log(JSON.stringify(familyName))
+
+        }}
     catch( e ) {
         // Catch anything bad that happens
         console.error( "We've thrown! Whoops!", e );
-        }
+    }
 
 })(); // Wrap in parenthesis and call now
+
+function changePatientData (hl7, a, c) {
+    hl7.set('PID.5.1', 'Test' + a);
+    hl7.set('PID.5.2', 'Test' + a)
+    hl7.set('PID.7', '19991212')
+    hl7.set('PID.3.1', ''+ c)
+}
+
+function randomSerialNumber() {
+    let c = (Math.floor(Math.random() * (999999 - 0o00001) + 0o00001));
+    return c
+}
