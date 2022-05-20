@@ -36,7 +36,10 @@ let a =  0;
             console.log()
             const familyName = hl7.get('PID');
             console.log(JSON.stringify(familyName))
+            const finalizedHL7 = hl7.build();
 
+            fs.writeFileSync(filePath, finalizedHL7, 'utf8');
+            replaceAll(originalSerialNumber,newSerialNumber)
         }}
     catch( e ) {
         // Catch anything bad that happens
@@ -49,10 +52,18 @@ function changePatientData (hl7, a, c) {
     hl7.set('PID.5.1', 'Test' + a);
     hl7.set('PID.5.2', 'Test' + a)
     hl7.set('PID.7', '19991212')
-    hl7.set('PID.3.1', ''+ c)
+    hl7.set('PID.3.1', 'model:U228/serial:'+ c)
 }
 
 function randomSerialNumber() {
     let c = (Math.floor(Math.random() * (999999 - 0o00001) + 0o00001));
     return c
+}
+
+function replaceAll(originalSerialNumber,newSerialNumber) {
+var re = new RegExp(originalSerialNumber, 'g');
+
+addd = fileContent.replace(re, newSerialNumber);
+
+return addd.replace(new RegExp(originalSerialNumber, 'g'), replace);
 }
